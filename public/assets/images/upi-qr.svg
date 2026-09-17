@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <rect width="240" height="240" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+  <rect x="25" y="25" width="60" height="60" rx="8" fill="#0f172a" />
+  <rect x="35" y="35" width="40" height="40" rx="4" fill="#ffffff" />
+  <rect x="43" y="43" width="24" height="24" rx="2" fill="#0284c7" />
+
+  <rect x="155" y="25" width="60" height="60" rx="8" fill="#0f172a" />
+  <rect x="165" y="35" width="40" height="40" rx="4" fill="#ffffff" />
+  <rect x="173" y="43" width="24" height="24" rx="2" fill="#0284c7" />
+
+  <rect x="25" y="155" width="60" height="60" rx="8" fill="#0f172a" />
+  <rect x="35" y="165" width="40" height="40" rx="4" fill="#ffffff" />
+  <rect x="43" y="173" width="24" height="24" rx="2" fill="#0284c7" />
+
+  <!-- QR Pattern Grid Elements -->
+  <rect x="100" y="30" width="12" height="12" fill="#334155"/>
+  <rect x="120" y="30" width="12" height="12" fill="#334155"/>
+  <rect x="100" y="55" width="25" height="12" fill="#0284c7"/>
+  <rect x="135" y="55" width="10" height="25" fill="#334155"/>
+  
+  <rect x="30" y="100" width="15" height="15" fill="#334155"/>
+  <rect x="60" y="105" width="20" height="10" fill="#0284c7"/>
+  <rect x="100" y="100" width="40" height="40" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="120" y="125" font-family="sans-serif" font-weight="900" font-size="16" text-anchor="middle" fill="#2563eb">SI</text>
+
+  <rect x="155" y="105" width="15" height="15" fill="#334155"/>
+  <rect x="180" y="100" width="25" height="15" fill="#0284c7"/>
+
+  <rect x="100" y="160" width="15" height="20" fill="#334155"/>
+  <rect x="125" y="155" width="20" height="15" fill="#0284c7"/>
+  <rect x="155" y="155" width="25" height="10" fill="#334155"/>
+  <rect x="190" y="165" width="25" height="25" fill="#0284c7"/>
+  <rect x="110" y="190" width="35" height="15" fill="#334155"/>
+  <rect x="160" y="195" width="20" height="20" fill="#0f172a"/>
+  
+  <text x="120" y="230" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle" fill="#64748b">SCAN WITH ANY UPI APP</text>
+</svg>
