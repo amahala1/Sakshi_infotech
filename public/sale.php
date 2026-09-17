@@ -18,23 +18,23 @@ require_once __DIR__ . '/includes/header.php';
 <div class="dual-split-bar">
   <a href="<?= url('shop.php?type=computer') ?>" class="split-track-card split-track-it">
     <div style="display:flex;align-items:center;gap:14px;">
-      <div style="width:48px;height:48px;border-radius:12px;background:rgba(56,189,248,0.15);color:#38bdf8;display:flex;align-items:center;justify-content:center;font-size:1.4rem;border:1px solid rgba(56,189,248,0.3);">
+      <div style="width:48px;height:48px;border-radius:12px;background:rgba(56,189,248,0.15);color:#38bdf8;display:flex;align-items:center;justify-content:center;font-size:1.4rem;border:1px solid rgba(56,189,248,0.3);flex-shrink:0;">
         <i class="fas fa-laptop-code"></i>
       </div>
       <div>
         <span style="font-size:0.72rem;text-transform:uppercase;color:#38bdf8;font-weight:800;letter-spacing:1px;">TRACK 01 // ENTERPRISE IT</span>
         <h3 style="font-size:1.15rem;font-weight:900;color:#ffffff;margin-top:2px;">IT Solutions &amp; Hardware Gadgets</h3>
-        <p style="font-size:0.8rem;color:#94a3b8;margin:0;">Laptops, Mini Desktops, Printers, NVMe SSDs &amp; Wi-Fi 6</p>
+        <p style="font-size:0.8rem;color:#94a3b8;margin:0;">Commercial Laptops, Mini PCs, Printers, NVMe SSDs &amp; Wi-Fi 6</p>
       </div>
     </div>
-    <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:#38bdf8;font-size:0.9rem;">
+    <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:#38bdf8;font-size:0.9rem;flex-shrink:0;">
       <i class="fas fa-arrow-right"></i>
     </div>
   </a>
 
   <a href="<?= url('shop.php?type=stationery') ?>" class="split-track-card split-track-stationery">
     <div style="display:flex;align-items:center;gap:14px;">
-      <div style="width:48px;height:48px;border-radius:12px;background:#ecfdf5;color:#059669;display:flex;align-items:center;justify-content:center;font-size:1.4rem;border:1px solid #a7f3d0;">
+      <div style="width:48px;height:48px;border-radius:12px;background:#ecfdf5;color:#059669;display:flex;align-items:center;justify-content:center;font-size:1.4rem;border:1px solid #a7f3d0;flex-shrink:0;">
         <i class="fas fa-pen-ruler"></i>
       </div>
       <div>
@@ -43,7 +43,7 @@ require_once __DIR__ . '/includes/header.php';
         <p style="font-size:0.8rem;color:#64748b;margin:0;">JK Copier Paper 75/80 GSM, Toners, Box Files &amp; Calculators</p>
       </div>
     </div>
-    <div style="width:36px;height:36px;border-radius:50%;background:#ecfdf5;display:flex;align-items:center;justify-content:center;color:#059669;font-size:0.9rem;">
+    <div style="width:36px;height:36px;border-radius:50%;background:#ecfdf5;display:flex;align-items:center;justify-content:center;color:#059669;font-size:0.9rem;flex-shrink:0;">
       <i class="fas fa-arrow-right"></i>
     </div>
   </a>
@@ -100,7 +100,7 @@ require_once __DIR__ . '/includes/header.php';
     </aside>
 
     <!-- Center/Right Bento Hero Showcase -->
-    <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:20px;">
+    <div class="hero-bento-grid">
       
       <!-- Bento Card 1: Deep Tech + Stationery Synergy Hero Banner -->
       <div class="bento-cell bento-tech-hero">
@@ -113,14 +113,14 @@ require_once __DIR__ . '/includes/header.php';
               <i class="fas fa-bolt"></i> Same-Day Dispatch
             </span>
           </div>
-          <h1 style="font-size:2.2rem;font-weight:900;line-height:1.2;margin-bottom:12px;color:#ffffff;letter-spacing:-0.5px;">
+          <h1 style="font-size:2.1rem;font-weight:900;line-height:1.2;margin-bottom:12px;color:#ffffff;letter-spacing:-0.5px;">
             High-Performance IT &amp; <span style="color:#38bdf8;">Creative Office Supplies</span>
           </h1>
-          <p style="font-size:0.92rem;color:#cbd5e1;line-height:1.6;margin-bottom:20px;max-width:480px;">
+          <p style="font-size:0.9rem;color:#cbd5e1;line-height:1.6;margin-bottom:20px;max-width:500px;">
             Commercial Lenovo ThinkPads, mini PCs, Crucial NVMe SSDs, genuine JK copier paper reams, and executive hard-bound registers delivered directly from our Jaipur distribution hub.
           </p>
         </div>
-        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px;">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:auto;">
           <a href="<?= url('shop.php') ?>" class="btn-neon-cta">
             <i class="fas fa-shopping-bag"></i> Explore All Categories &rarr;
           </a>
@@ -131,21 +131,22 @@ require_once __DIR__ . '/includes/header.php';
       </div>
 
       <!-- Right Column Bento Cards Stack -->
-      <div style="display:flex;flex-direction:column;gap:18px;">
+      <div style="display:flex;flex-direction:column;gap:18px;justify-content:space-between;">
         
         <!-- Bento Card 2: Featured Tech Deal of the Week -->
-        <div class="bento-cell bento-card-deal" style="padding:20px;">
+        <div class="bento-cell bento-card-deal" style="padding:18px;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
             <span style="font-size:0.7rem;text-transform:uppercase;color:var(--primary);font-weight:800;letter-spacing:1px;">TOP TECH DEAL</span>
             <span style="background:#fee2e2;color:#b91c1c;font-size:0.75rem;font-weight:900;padding:3px 8px;border-radius:6px;">13% OFF</span>
           </div>
           <div style="display:flex;align-items:center;gap:15px;">
-            <div style="width:90px;height:75px;background:#f8fafc;border-radius:8px;padding:6px;display:flex;align-items:center;justify-content:center;border:1px solid #e2e8f0;flex-shrink:0;">
+            <div style="width:85px;height:75px;background:#f8fafc;border-radius:8px;padding:6px;display:flex;align-items:center;justify-content:center;border:1px solid #e2e8f0;flex-shrink:0;">
               <img src="<?= product_image_url('laptop-lenovo.png') ?>" alt="ThinkPad E14" style="max-height:100%;max-width:100%;object-fit:contain;">
             </div>
             <div>
               <h4 style="font-size:0.92rem;font-weight:800;color:#0f172a;line-height:1.3;margin-bottom:4px;">Lenovo ThinkPad E14 i5</h4>
               <div style="font-size:1.15rem;font-weight:900;color:#0f172a;">₹59,990.00</div>
+              <span style="font-size:0.72rem;color:#059669;font-weight:700;">Incl. 18% GST Credit</span>
             </div>
           </div>
           <button class="btn-primary-si btn-ajax-add-cart" data-product-id="1" style="width:100%;padding:8px;font-size:0.82rem;justify-content:center;margin-top:12px;">
@@ -154,18 +155,19 @@ require_once __DIR__ . '/includes/header.php';
         </div>
 
         <!-- Bento Card 3: Creative Stationery Carton Deal -->
-        <div class="bento-cell bento-card-stationery" style="padding:20px;">
+        <div class="bento-cell bento-card-stationery" style="padding:18px;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
             <span style="font-size:0.7rem;text-transform:uppercase;color:#059669;font-weight:800;letter-spacing:1px;">BULK INSTITUTION DEAL</span>
             <span style="background:#dcfce7;color:#15803d;font-size:0.75rem;font-weight:900;padding:3px 8px;border-radius:6px;">21% OFF</span>
           </div>
           <div style="display:flex;align-items:center;gap:15px;">
-            <div style="width:90px;height:75px;background:#ffffff;border-radius:8px;padding:6px;display:flex;align-items:center;justify-content:center;border:1px solid #bbf7d0;flex-shrink:0;">
+            <div style="width:85px;height:75px;background:#ffffff;border-radius:8px;padding:6px;display:flex;align-items:center;justify-content:center;border:1px solid #bbf7d0;flex-shrink:0;">
               <img src="<?= product_image_url('jk-copier-box.png') ?>" alt="JK Copier Carton" style="max-height:100%;max-width:100%;object-fit:contain;">
             </div>
             <div>
               <h4 style="font-size:0.92rem;font-weight:800;color:#0f172a;line-height:1.3;margin-bottom:4px;">JK Copier A4 (Box 5 Reams)</h4>
               <div style="font-size:1.15rem;font-weight:900;color:#059669;">₹1,499.00</div>
+              <span style="font-size:0.72rem;color:#059669;font-weight:700;">Incl. 12% GST Credit</span>
             </div>
           </div>
           <button class="btn-primary-si btn-ajax-add-cart" data-product-id="11" style="background:#059669;width:100%;padding:8px;font-size:0.82rem;justify-content:center;margin-top:12px;">
@@ -230,7 +232,7 @@ function toggleSubmenu(btn, menuId) {
   </div>
 </div>
 
-<!-- 3. Category Showcase Grid -->
+<!-- 3. Popular Categories Grid (6 Clean Columns) -->
 <div class="section-wrapper">
   <div class="section-header">
     <div>
@@ -242,13 +244,13 @@ function toggleSubmenu(btn, menuId) {
     </a>
   </div>
 
-  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));gap:16px;">
+  <div class="popular-cats-grid">
     <?php foreach (array_slice($allCategories, 0, 6) as $c): ?>
-      <a href="<?= url('shop.php?category_slug=' . urlencode($c['slug'])) ?>" style="background:#ffffff;border:1px solid var(--border-color);border-radius:14px;padding:20px 14px;text-align:center;transition:var(--transition);display:block;text-decoration:none;box-shadow:var(--shadow-sm);" onmouseover="this.style.borderColor='var(--primary)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)';this.style.transform='translateY(0)'">
-        <div style="width:52px;height:52px;border-radius:50%;background:var(--primary-light);color:var(--primary);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;">
+      <a href="<?= url('shop.php?category_slug=' . urlencode($c['slug'])) ?>" style="background:#ffffff;border:1px solid var(--border-color);border-radius:14px;padding:20px 14px;text-align:center;transition:var(--transition);display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;box-shadow:var(--shadow-sm);height:100%;" onmouseover="this.style.borderColor='var(--primary)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)';this.style.transform='translateY(0)'">
+        <div style="width:52px;height:52px;border-radius:50%;background:var(--primary-light);color:var(--primary);margin-bottom:12px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;">
           <i class="fas <?= htmlspecialchars($c['icon']) ?>"></i>
         </div>
-        <h4 style="font-size:0.92rem;font-weight:800;color:var(--text-main);margin-bottom:4px;"><?= htmlspecialchars($c['name']) ?></h4>
+        <h4 style="font-size:0.9rem;font-weight:800;color:var(--text-main);margin-bottom:4px;"><?= htmlspecialchars($c['name']) ?></h4>
         <span style="font-size:0.75rem;color:var(--text-muted);font-weight:700;"><?= $c['product_count'] ?> Products</span>
       </a>
     <?php endforeach; ?>
@@ -287,6 +289,9 @@ function toggleSubmenu(btn, menuId) {
         <div class="product-body">
           <div class="product-meta-row">
             <span class="product-brand-tag"><?= htmlspecialchars($prod['brand'] ?: $prod['category_name']) ?></span>
+            <?php if (!empty($prod['subcategory_name'])): ?>
+              <span class="product-subcat-badge" title="<?= htmlspecialchars($prod['subcategory_name']) ?>"><?= htmlspecialchars($prod['subcategory_name']) ?></span>
+            <?php endif; ?>
             <div class="product-rating">
               <i class="fas fa-star"></i>
               <span>4.9</span>
@@ -304,7 +309,7 @@ function toggleSubmenu(btn, menuId) {
                 <span class="regular-price">₹<?= number_format($prod['regular_price'], 2) ?></span>
               <?php endif; ?>
             </div>
-            <span class="gst-note">Incl. <?= (int)$prod['gst_rate'] ?>% GST (Tax Credit Claimable)</span>
+            <span class="gst-note">Incl. <?= (int)$prod['gst_rate'] ?>% GST • Input Tax Credit</span>
           </div>
 
           <button type="button" class="btn-add-cart btn-ajax-add-cart" data-product-id="<?= $prod['id'] ?>">
@@ -337,6 +342,9 @@ function toggleSubmenu(btn, menuId) {
           <?php if ($discount > 0): ?>
             <span class="badge-discount"><?= $discount ?>% OFF</span>
           <?php endif; ?>
+          <span class="badge-stock <?= $prod['stock_qty'] > 3 ? 'badge-in-stock' : 'badge-low-stock' ?>">
+            <?= $prod['stock_qty'] > 0 ? ($prod['stock_qty'] > 3 ? 'In Stock' : 'Only ' . $prod['stock_qty'] . ' left') : 'Out of Stock' ?>
+          </span>
           <a href="<?= url('product.php?id=' . $prod['id']) ?>" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
             <img src="<?= product_image_url($prod['image_url']) ?>" alt="<?= htmlspecialchars($prod['name']) ?>" loading="lazy">
           </a>
@@ -344,9 +352,12 @@ function toggleSubmenu(btn, menuId) {
         <div class="product-body">
           <div class="product-meta-row">
             <span class="product-brand-tag"><?= htmlspecialchars($prod['brand'] ?: 'Hardware') ?></span>
-            <div class="product-rating"><i class="fas fa-star"></i> 4.8</div>
+            <?php if (!empty($prod['subcategory_name'])): ?>
+              <span class="product-subcat-badge" title="<?= htmlspecialchars($prod['subcategory_name']) ?>"><?= htmlspecialchars($prod['subcategory_name']) ?></span>
+            <?php endif; ?>
+            <div class="product-rating"><i class="fas fa-star"></i> <span>4.8</span></div>
           </div>
-          <a href="<?= url('product.php?id=' . $prod['id']) ?>" class="product-title"><?= htmlspecialchars($prod['name']) ?></a>
+          <a href="<?= url('product.php?id=' . $prod['id']) ?>" class="product-title" title="<?= htmlspecialchars($prod['name']) ?>"><?= htmlspecialchars($prod['name']) ?></a>
           <div class="product-pricing">
             <div class="price-main-row">
               <span class="sale-price">₹<?= number_format($prod['sale_price'], 2) ?></span>
@@ -354,7 +365,7 @@ function toggleSubmenu(btn, menuId) {
                 <span class="regular-price">₹<?= number_format($prod['regular_price'], 2) ?></span>
               <?php endif; ?>
             </div>
-            <span class="gst-note">Incl. <?= (int)$prod['gst_rate'] ?>% GST</span>
+            <span class="gst-note">Incl. <?= (int)$prod['gst_rate'] ?>% GST • Input Tax Credit</span>
           </div>
           <button type="button" class="btn-add-cart btn-ajax-add-cart" data-product-id="<?= $prod['id'] ?>">
             <i class="fas fa-cart-plus"></i> Add to Cart
@@ -386,6 +397,9 @@ function toggleSubmenu(btn, menuId) {
           <?php if ($discount > 0): ?>
             <span class="badge-discount"><?= $discount ?>% OFF</span>
           <?php endif; ?>
+          <span class="badge-stock <?= $prod['stock_qty'] > 3 ? 'badge-in-stock' : 'badge-low-stock' ?>">
+            <?= $prod['stock_qty'] > 0 ? ($prod['stock_qty'] > 3 ? 'In Stock' : 'Only ' . $prod['stock_qty'] . ' left') : 'Out of Stock' ?>
+          </span>
           <a href="<?= url('product.php?id=' . $prod['id']) ?>" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
             <img src="<?= product_image_url($prod['image_url']) ?>" alt="<?= htmlspecialchars($prod['name']) ?>" loading="lazy">
           </a>
@@ -393,9 +407,12 @@ function toggleSubmenu(btn, menuId) {
         <div class="product-body">
           <div class="product-meta-row">
             <span class="product-brand-tag" style="background:#ecfdf5;color:#059669;"><?= htmlspecialchars($prod['brand'] ?: $prod['category_name']) ?></span>
-            <div class="product-rating"><i class="fas fa-star"></i> 4.9</div>
+            <?php if (!empty($prod['subcategory_name'])): ?>
+              <span class="product-subcat-badge" style="background:#ecfdf5;color:#059669;" title="<?= htmlspecialchars($prod['subcategory_name']) ?>"><?= htmlspecialchars($prod['subcategory_name']) ?></span>
+            <?php endif; ?>
+            <div class="product-rating"><i class="fas fa-star"></i> <span>4.9</span></div>
           </div>
-          <a href="<?= url('product.php?id=' . $prod['id']) ?>" class="product-title"><?= htmlspecialchars($prod['name']) ?></a>
+          <a href="<?= url('product.php?id=' . $prod['id']) ?>" class="product-title" title="<?= htmlspecialchars($prod['name']) ?>"><?= htmlspecialchars($prod['name']) ?></a>
           <div class="product-pricing">
             <div class="price-main-row">
               <span class="sale-price">₹<?= number_format($prod['sale_price'], 2) ?></span>
@@ -403,7 +420,7 @@ function toggleSubmenu(btn, menuId) {
                 <span class="regular-price">₹<?= number_format($prod['regular_price'], 2) ?></span>
               <?php endif; ?>
             </div>
-            <span class="gst-note">Incl. <?= (int)$prod['gst_rate'] ?>% GST</span>
+            <span class="gst-note">Incl. <?= (int)$prod['gst_rate'] ?>% GST • Input Tax Credit</span>
           </div>
           <button type="button" class="btn-add-cart btn-ajax-add-cart" data-product-id="<?= $prod['id'] ?>">
             <i class="fas fa-cart-plus"></i> Add to Cart

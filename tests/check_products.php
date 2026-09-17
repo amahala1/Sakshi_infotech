@@ -1,12 +1,11 @@
 <?php
 require_once __DIR__ . '/../config/config.php';
-require_once __DIR__ . '/../src/Product.php';
+require_once __DIR__ . '/../config/database.php';
 
-$prods = Product::getProducts(['limit' => 20]);
-echo "Total products fetched: " . count($prods) . "\n";
-foreach ($prods as $p) {
-    $img = $p['image_url'];
-    $existsInAssets = file_exists(PUBLIC_PATH . '/assets/images/' . $img);
-    $existsInImages = file_exists(PUBLIC_PATH . '/images/' . $img);
-    echo "ID: {$p['id']} | Name: {$p['name']} | Price: {$p['sale_price']} | Img: {$img} [Assets: " . ($existsInAssets ? 'YES' : 'NO') . ", Images: " . ($existsInImages ? 'YES' : 'NO') . "]\n";
+$db = Database::getConnection();
+$rows = $db->query("SELECT id, name, is_featured, category_id FROM products")->fetchAll(PDO::FETCH_ASSOC);
+echo "Products featured flag:\n";
+foreach ($rows as $r) {
+    echo "ID: {$r['id']} | Featured: {$r['is_featured']} | Name: {$r['name']}\n";
 }
+
