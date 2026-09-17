@@ -86,10 +86,10 @@ require_once __DIR__ . '/includes/header.php';
     <?php endif; ?>
   </div>
 
-  <div style="display:grid;grid-template-columns:280px 1fr;gap:28px;align-items:start;">
+  <div class="shop-layout-wrapper">
     
     <!-- Left Sidebar Filters (MegaCompu 2-Tier Architecture) -->
-    <aside style="background:#ffffff;border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-sm);">
+    <aside class="shop-sidebar">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;border-bottom:2px solid #f1f5f9;padding-bottom:12px;">
         <h3 style="font-size:1rem;font-weight:800;color:#0f172a;margin:0;display:flex;align-items:center;gap:8px;">
           <i class="fas fa-sitemap" style="color:var(--primary);"></i> MegaCompu Filter
@@ -287,7 +287,7 @@ require_once __DIR__ . '/includes/header.php';
           <a href="<?= url('shop.php') ?>" class="btn-primary-si" style="display:inline-flex;">View Complete Catalog</a>
         </div>
       <?php else: ?>
-        <div class="product-grid">
+        <div class="shop-product-grid">
           <?php foreach ($products as $prod): 
             $discount = round((($prod['regular_price'] - $prod['sale_price']) / $prod['regular_price']) * 100);
           ?>

@@ -61,7 +61,7 @@ if (!defined('BASE_PATH')) {
   </div>
 
   <div class="footer-bottom">
-    <div style="max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+    <div style="max-width:var(--page-max-width);margin:0 auto;padding:0 var(--page-padding);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
       <p>© <?= date('Y') ?> <strong><?= APP_NAME ?></strong>. All Rights Reserved. Indian GST Compliant E-Commerce Platform.</p>
       <p style="color:#64748b;font-size:0.8rem;">Authorized Commercial IT Hardware &amp; Stationery Distribution Hub</p>
     </div>

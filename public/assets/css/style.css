@@ -33,6 +33,8 @@
   --shadow-hover: 0 16px 36px -6px rgba(15, 23, 42, 0.1), 0 6px 14px -3px rgba(15, 23, 42, 0.05);
   --shadow-glow: 0 4px 18px rgba(30, 58, 138, 0.2);
   --transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --page-max-width: 1560px;
+  --page-padding: clamp(14px, 2.5vw, 32px);
 }
 
 * {
@@ -76,9 +78,9 @@ img {
 }
 
 .top-bar-inner {
-  max-width: 1280px;
+  max-width: var(--page-max-width);
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--page-padding);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -113,9 +115,9 @@ img {
 }
 
 .header-container {
-  max-width: 1280px;
+  max-width: var(--page-max-width);
   margin: 0 auto;
-  padding: 12px 20px;
+  padding: 12px var(--page-padding);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -251,9 +253,9 @@ img {
 }
 
 .nav-container {
-  max-width: 1280px;
+  max-width: var(--page-max-width);
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--page-padding);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -447,9 +449,9 @@ img {
 }
 
 .hero-grid {
-  max-width: 1280px;
+  max-width: var(--page-max-width);
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--page-padding);
   display: grid;
   grid-template-columns: 1.25fr 0.85fr;
   gap: 40px;
@@ -554,9 +556,9 @@ img {
 }
 
 .features-grid {
-  max-width: 1280px;
+  max-width: var(--page-max-width);
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--page-padding);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
@@ -602,9 +604,9 @@ img {
 }
 
 .hero-megacompu-container {
-  max-width: 1280px;
+  max-width: var(--page-max-width);
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--page-padding);
   display: grid;
   grid-template-columns: 270px 1fr;
   gap: 24px;
@@ -758,9 +760,9 @@ img {
    Product Grid & Premium Clean Cards
 ------------------------------------------------------------- */
 .section-wrapper {
-  max-width: 1280px;
+  max-width: var(--page-max-width);
   margin: 36px auto;
-  padding: 0 20px;
+  padding: 0 var(--page-padding);
 }
 
 .section-header {
@@ -1391,9 +1393,9 @@ img {
 }
 
 .footer-top {
-  max-width: 1280px;
+  max-width: var(--page-max-width);
   margin: 0 auto;
-  padding: 50px 20px 30px;
+  padding: 50px var(--page-padding) 30px;
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1.5fr;
   gap: 40px;
@@ -1539,9 +1541,9 @@ img {
    Dual-Split Navigation Track
 ------------------------------------------------------------- */
 .dual-split-bar {
-  max-width: 1280px;
+  max-width: var(--page-max-width);
   margin: 18px auto 0;
-  padding: 0 20px;
+  padding: 0 var(--page-padding);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
@@ -1586,9 +1588,9 @@ img {
    Bento Box Grid Architecture
 ------------------------------------------------------------- */
 .bento-grid-section {
-  max-width: 1280px;
+  max-width: var(--page-max-width);
   margin: 28px auto 0;
-  padding: 0 20px;
+  padding: 0 var(--page-padding);
 }
 .bento-grid-wrap {
   display: grid;
@@ -1684,3 +1686,72 @@ img {
     grid-template-columns: 1fr;
   }
 }
+
+/* -------------------------------------------------------------
+   Shop Catalog Layout: Dedicated Sticky Sidebar & 3-4 Grid
+------------------------------------------------------------- */
+.shop-layout-wrapper {
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .shop-layout-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+.shop-sidebar {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 85px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+.shop-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+.shop-sidebar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.shop-product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+@media (max-width: 1380px) {
+  .shop-product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .shop-product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .shop-product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .shop-product-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
