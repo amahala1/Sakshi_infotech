@@ -25,12 +25,12 @@ define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : '');
 define('DB_CHARSET', 'utf8mb4');
 
 // Payment Options
-define('UPI_ID', 'sakshiinfotech@icici');
+define('UPI_ID', 'sakshiinfotechjjn@ybl');
 define('UPI_NAME', 'Sakshi Infotech');
-define('BANK_NAME', 'State Bank of India');
-define('BANK_ACCOUNT', '389201948201');
-define('BANK_IFSC', 'SBIN0004521');
-define('BANK_BRANCH', 'Jhotwara Branch, Jaipur');
+define('BANK_NAME', 'Rajasthan Gramin Bank');
+define('BANK_ACCOUNT', '21486001027');
+define('BANK_IFSC', 'RMGB0001486');
+define('BANK_BRANCH', 'Collectoret Circle Jhunjhunu');
 
 // Path helpers
 define('BASE_PATH', dirname(__DIR__));

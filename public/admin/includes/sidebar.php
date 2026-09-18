@@ -106,6 +106,11 @@ if ($user['role'] === 'admin') {
           <i class="fas fa-folder-tree"></i> Categories
         </a>
       </li>
+      <li>
+        <a href="<?= url('admin/settings.php') ?>" class="<?= $currentFile === 'settings.php' ? 'active' : '' ?>">
+          <i class="fas fa-envelope-circle-check" style="color:#38bdf8;"></i> Email &amp; SMTP Settings
+        </a>
+      </li>
     <?php endif; ?>
 
     <li>

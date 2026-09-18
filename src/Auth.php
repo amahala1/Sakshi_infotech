@@ -86,10 +86,85 @@ class Auth {
     }
 
     /**
-     * Register customer account
+     * Generate and send 6-digit OTP to user email
+     */
+    public static function generateAndSendOtp(string $email, string $name = 'Customer', string $action = 'registration'): array {
+        $email = trim(strtolower($email));
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return ['success' => false, 'message' => 'Please enter a valid email address.'];
+        }
+
+        require_once BASE_PATH . '/src/Mailer.php';
+
+        $db = Database::getConnection();
+        $otp = (string)random_int(100000, 999999);
+        $expiresAt = date('Y-m-d H:i:s', time() + (15 * 60)); // 15 minutes
+
+        // Invalidate prior unexpired OTPs for this email and action
+        $stmtInvalidate = $db->prepare("UPDATE email_otps SET is_used = 1 WHERE email = ? AND action_type = ? AND is_used = 0");
+        $stmtInvalidate->execute([$email, $action]);
+
+        // Insert new OTP
+        $stmtInsert = $db->prepare("
+            INSERT INTO email_otps (email, otp_code, action_type, expires_at, is_used, created_at)
+            VALUES (?, ?, ?, ?, 0, ?)
+        ");
+        $stmtInsert->execute([$email, $otp, $action, $expiresAt, date('Y-m-d H:i:s')]);
+
+        // Dispatch via Mailer
+        $mailResult = Mailer::sendOtp($email, $name, $otp);
+
+        return [
+            'success' => true,
+            'message' => "A 6-digit OTP has been sent to {$email}.",
+            'dev_otp' => $otp // Helpful for local testing if SMTP credentials are yet to be entered
+        ];
+    }
+
+    /**
+     * Verify submitted OTP for given email
+     */
+    public static function verifyOtp(string $email, string $otp, string $action = 'registration'): array {
+        $email = trim(strtolower($email));
+        $otp = trim($otp);
+
+        if (empty($email) || empty($otp)) {
+            return ['success' => false, 'message' => 'Email and OTP are required.'];
+        }
+
+        $db = Database::getConnection();
+        $now = date('Y-m-d H:i:s');
+        $stmt = $db->prepare("
+            SELECT id FROM email_otps 
+            WHERE email = ? AND otp_code = ? AND action_type = ? AND is_used = 0 AND expires_at >= ?
+            ORDER BY id DESC LIMIT 1
+        ");
+        $stmt->execute([$email, $otp, $action, $now]);
+        $record = $stmt->fetch();
+
+        if (!$record) {
+            return ['success' => false, 'message' => 'Invalid or expired OTP code. Please request a new one.'];
+        }
+
+        // Mark OTP as used
+        $stmtUse = $db->prepare("UPDATE email_otps SET is_used = 1 WHERE id = ?");
+        $stmtUse->execute([$record['id']]);
+
+        // Mark verified in session
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $_SESSION['email_verified_' . md5($email)] = true;
+
+        return ['success' => true, 'message' => 'Email verified successfully!'];
+    }
+
+    /**
+     * Register customer account with Customer Type (Individual/Company), GSTIN, and OTP check
      */
     public static function register(array $data): array {
         $db = Database::getConnection();
+        require_once BASE_PATH . '/src/Mailer.php';
 
         // Validations
         if (empty($data['full_name']) || empty($data['username']) || empty($data['email']) || empty($data['password'])) {
@@ -100,9 +175,46 @@ class Auth {
             return ['success' => false, 'message' => 'Password must be at least 6 characters.'];
         }
 
+        $customerType = ($data['customer_type'] ?? 'individual') === 'company' ? 'company' : 'individual';
+        $companyName = trim($data['company_name'] ?? '');
+        $gstNumber = strtoupper(trim($data['gst_number'] ?? ''));
+
+        // If Company is selected, GST and Company Name are mandatory
+        if ($customerType === 'company') {
+            if (empty($companyName)) {
+                return ['success' => false, 'message' => 'Company / Business Name is required for company accounts.'];
+            }
+            if (empty($gstNumber)) {
+                return ['success' => false, 'message' => 'GST Number (GSTIN) is mandatory for company accounts.'];
+            }
+            // Standard Indian GSTIN Regex: 15 alphanumeric characters
+            $gstRegex = '/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/';
+            if (!preg_match($gstRegex, $gstNumber)) {
+                return ['success' => false, 'message' => 'Invalid GSTIN format. Example: 08AAAAA0000A1Z5 (15 characters).'];
+            }
+        }
+
+        // Check Email OTP verification
+        $email = trim(strtolower($data['email']));
+        $sessionKey = 'email_verified_' . md5($email);
+        $isVerified = !empty($_SESSION[$sessionKey]);
+
+        // If not in session, check if an OTP was verified within last 30 minutes in email_otps table
+        if (!$isVerified && !empty($data['otp'])) {
+            $verifyRes = self::verifyOtp($email, $data['otp'], 'registration');
+            if (!$verifyRes['success']) {
+                return ['success' => false, 'message' => 'Email verification required: ' . $verifyRes['message']];
+            }
+            $isVerified = true;
+        }
+
+        if (!$isVerified) {
+            return ['success' => false, 'message' => 'Please verify your email address via OTP before registering.'];
+        }
+
         // Check if username or email exists
         $stmtCheck = $db->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
-        $stmtCheck->execute([trim($data['username']), trim($data['email'])]);
+        $stmtCheck->execute([trim($data['username']), $email]);
         if ($stmtCheck->fetch()) {
             return ['success' => false, 'message' => 'Username or Email is already registered.'];
         }
@@ -112,16 +224,23 @@ class Auth {
         $authTokenHash = HashEngine::generateIntegrityHash($data['username'] . '|' . time());
 
         $stmtInsert = $db->prepare("
-            INSERT INTO users (username, password_hash, full_name, email, phone, address, city, state, pincode, role, status, auth_token_hash)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'customer', 'active', ?)
+            INSERT INTO users (
+                username, password_hash, full_name, email, phone, 
+                customer_type, company_name, gst_number, email_verified,
+                address, city, state, pincode, role, status, auth_token_hash
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?, 'customer', 'active', ?)
         ");
 
         $stmtInsert->execute([
             trim($data['username']),
             $hashedPassword,
             trim($data['full_name']),
-            trim($data['email']),
+            $email,
             trim($data['phone'] ?? ''),
+            $customerType,
+            $customerType === 'company' ? $companyName : null,
+            $customerType === 'company' ? $gstNumber : null,
             trim($data['address'] ?? ''),
             trim($data['city'] ?? ''),
             trim($data['state'] ?? 'Rajasthan'),
@@ -130,6 +249,21 @@ class Auth {
         ]);
 
         $newUserId = (int)$db->lastInsertId();
+
+        // Clear session OTP flag
+        unset($_SESSION[$sessionKey]);
+
+        // Dispatch Welcome Email with User ID and Confirmation
+        $newUserRecord = [
+            'id' => $newUserId,
+            'username' => trim($data['username']),
+            'full_name' => trim($data['full_name']),
+            'email' => $email,
+            'customer_type' => $customerType,
+            'company_name' => $companyName,
+            'gst_number' => $gstNumber
+        ];
+        Mailer::sendUserWelcome($newUserRecord, $data['password']);
 
         // Auto login
         return self::login($data['username'], $data['password']);

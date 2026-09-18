@@ -143,13 +143,18 @@ class Order {
 
             if ($existingUser) {
                 $userId = (int)$existingUser['id'];
-            } else {
                 // Register temporary customer account
                 $guestUsername = 'cust_' . strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $shipping['name'])) . '_' . rand(100, 999);
-                $guestPass = password_hash('Guest@' . rand(1000, 9999), PASSWORD_BCRYPT);
+                $plainGuestPass = 'Sakshi@' . rand(1000, 9999);
+                $guestPass = password_hash($plainGuestPass, PASSWORD_BCRYPT);
+                $guestCustomerType = !empty($shipping['gstin']) ? 'company' : 'individual';
                 $stmtNew = $db->prepare("
-                    INSERT INTO users (username, password_hash, full_name, email, phone, address, city, state, pincode, role)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'customer')
+                    INSERT INTO users (
+                        username, password_hash, full_name, email, phone,
+                        customer_type, company_name, gst_number, email_verified,
+                        address, city, state, pincode, role
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?, 'customer')
                 ");
                 $stmtNew->execute([
                     $guestUsername,
@@ -157,12 +162,27 @@ class Order {
                     trim($shipping['name']),
                     trim($shipping['email']),
                     trim($shipping['phone']),
+                    $guestCustomerType,
+                    $guestCustomerType === 'company' ? ($shipping['business_name'] ?? null) : null,
+                    $guestCustomerType === 'company' ? ($shipping['gstin'] ?? null) : null,
                     trim($shipping['address']),
                     trim($shipping['city']),
                     trim($shipping['state']),
                     trim($shipping['pincode'])
                 ]);
                 $userId = (int)$db->lastInsertId();
+
+                // Send welcome email with login ID & password
+                require_once BASE_PATH . '/src/Mailer.php';
+                Mailer::sendUserWelcome([
+                    'id' => $userId,
+                    'username' => $guestUsername,
+                    'full_name' => trim($shipping['name']),
+                    'email' => trim($shipping['email']),
+                    'customer_type' => $guestCustomerType,
+                    'company_name' => $shipping['business_name'] ?? null,
+                    'gst_number' => $shipping['gstin'] ?? null
+                ], $plainGuestPass);
             }
         }
 
@@ -260,6 +280,13 @@ class Order {
         // 7. Clear Cart
         self::clearCart();
 
+        // 8. Dispatch Order Confirmation Transactional Email
+        $createdOrder = self::getOrderById($orderId);
+        if ($createdOrder) {
+            require_once BASE_PATH . '/src/Mailer.php';
+            Mailer::sendOrderPlaced($createdOrder, $cart['items']);
+        }
+
         return [
             'success' => true,
             'order_id' => $orderId,
@@ -314,6 +341,15 @@ class Order {
         $staff = Auth::user();
         Auth::logAudit('order', $orderId, 'PAYMENT_' . strtoupper($status), $staffId, $staff['full_name'] ?? 'Staff', 'staff_accounts', "Payment marked as {$status}. Payment Seal Hash: {$paymentHash}");
 
+        // Dispatch Payment Received Transactional Email
+        if ($status === 'verified') {
+            $updatedOrder = self::getOrderById($orderId);
+            if ($updatedOrder) {
+                require_once BASE_PATH . '/src/Mailer.php';
+                Mailer::sendPaymentReceived($updatedOrder);
+            }
+        }
+
         return ['success' => true, 'payment_status' => $status, 'payment_hash' => $paymentHash];
     }
 
@@ -339,6 +375,13 @@ class Order {
 
         $staff = Auth::user();
         Auth::logAudit('order', $orderId, 'ORDER_CHECKED', $staffId, $staff['full_name'] ?? 'Staff', 'staff_checker', "Order {$order['order_number']} verified and packed by staff.");
+
+        // Dispatch Order Packed Notification Email
+        $packedOrder = self::getOrderById($orderId);
+        if ($packedOrder) {
+            require_once BASE_PATH . '/src/Mailer.php';
+            Mailer::sendOrderPacked($packedOrder);
+        }
 
         return ['success' => true, 'order_status' => 'checked'];
     }
@@ -371,6 +414,13 @@ class Order {
         $staff = Auth::user();
         Auth::logAudit('order', $orderId, 'ORDER_DISPATCHED', $staffId, $staff['full_name'] ?? 'Staff', 'staff_dispatch', "Dispatched via {$courier} (AWB: {$trackingNo}). Dispatch Hash: {$dispatchHash}");
 
+        // Dispatch Order Dispatched Notification Email
+        $dispatchedOrder = self::getOrderById($orderId);
+        if ($dispatchedOrder) {
+            require_once BASE_PATH . '/src/Mailer.php';
+            Mailer::sendOrderDispatched($dispatchedOrder, trim($courier), trim($trackingNo));
+        }
+
         return ['success' => true, 'dispatch_hash' => $dispatchHash, 'order_status' => 'dispatched'];
     }
 
@@ -384,6 +434,13 @@ class Order {
 
         $staff = Auth::user();
         Auth::logAudit('order', $orderId, 'ORDER_DELIVERED', $staffId, $staff['full_name'] ?? 'Staff', 'staff_dispatch', "Order marked as Delivered to customer.");
+
+        // Dispatch Order Delivered Notification Email
+        $deliveredOrder = self::getOrderById($orderId);
+        if ($deliveredOrder) {
+            require_once BASE_PATH . '/src/Mailer.php';
+            Mailer::sendOrderDelivered($deliveredOrder);
+        }
 
         return ['success' => true, 'order_status' => 'delivered'];
     }

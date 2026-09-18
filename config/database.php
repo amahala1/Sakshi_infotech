@@ -100,6 +100,10 @@ class Database {
                     state VARCHAR(100) DEFAULT NULL,
                     pincode VARCHAR(10) DEFAULT NULL,
                     role ENUM('admin', 'staff_accounts', 'staff_checker', 'staff_dispatch', 'customer') DEFAULT 'customer',
+                    customer_type VARCHAR(20) DEFAULT 'individual',
+                    company_name VARCHAR(150) DEFAULT NULL,
+                    gst_number VARCHAR(20) DEFAULT NULL,
+                    email_verified TINYINT(1) DEFAULT 0,
                     status VARCHAR(30) DEFAULT 'active',
                     auth_token_hash VARCHAR(64) DEFAULT NULL,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -205,6 +209,34 @@ class Database {
                     ip_address VARCHAR(45) DEFAULT NULL,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+                CREATE TABLE IF NOT EXISTS system_settings (
+                    setting_key VARCHAR(60) PRIMARY KEY,
+                    setting_value TEXT,
+                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+                CREATE TABLE IF NOT EXISTS email_otps (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    email VARCHAR(150) NOT NULL,
+                    otp_code VARCHAR(10) NOT NULL,
+                    action_type VARCHAR(50) DEFAULT 'registration',
+                    expires_at DATETIME NOT NULL,
+                    is_used TINYINT(1) DEFAULT 0,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    INDEX idx_email_otp (email, otp_code)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+                CREATE TABLE IF NOT EXISTS email_logs (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    recipient_email VARCHAR(150) NOT NULL,
+                    subject VARCHAR(255) NOT NULL,
+                    event_type VARCHAR(50) NOT NULL,
+                    status VARCHAR(20) NOT NULL,
+                    error_message TEXT NULL,
+                    sent_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    INDEX idx_email_logs (recipient_email, event_type)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
             ");
         } else {
             // SQLite Compatible Syntax
@@ -221,6 +253,10 @@ class Database {
                     state TEXT,
                     pincode TEXT,
                     role TEXT DEFAULT 'customer',
+                    customer_type TEXT DEFAULT 'individual',
+                    company_name TEXT DEFAULT NULL,
+                    gst_number TEXT DEFAULT NULL,
+                    email_verified INTEGER DEFAULT 0,
                     status TEXT DEFAULT 'active',
                     auth_token_hash TEXT,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -325,6 +361,32 @@ class Database {
                     details TEXT,
                     ip_address TEXT,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                );
+
+                CREATE TABLE IF NOT EXISTS system_settings (
+                    setting_key TEXT PRIMARY KEY,
+                    setting_value TEXT,
+                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                );
+
+                CREATE TABLE IF NOT EXISTS email_otps (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    email TEXT NOT NULL,
+                    otp_code TEXT NOT NULL,
+                    action_type TEXT DEFAULT 'registration',
+                    expires_at DATETIME NOT NULL,
+                    is_used INTEGER DEFAULT 0,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                );
+
+                CREATE TABLE IF NOT EXISTS email_logs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    recipient_email TEXT NOT NULL,
+                    subject TEXT NOT NULL,
+                    event_type TEXT NOT NULL,
+                    status TEXT NOT NULL,
+                    error_message TEXT,
+                    sent_at DATETIME DEFAULT CURRENT_TIMESTAMP
                 );
             ");
         }
